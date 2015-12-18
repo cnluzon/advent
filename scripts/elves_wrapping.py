@@ -73,6 +73,17 @@ def read_input_file(in_file):
     fi.close()
     return result
 
+def compute_total_wrapping_paper(in_file):
+    total_paper = 0
+    box_dims_matrix = read_input_file(in_file)
+
+    for box_dims in box_dims_matrix:
+        gift_box = ElfBox(box_dims)
+        wrapping_surface = gift_box.compute_wrapping_surface()
+        total_paper += wrapping_surface
+
+    return total_paper
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Reads the input from programming advent 02 and outputs the result')
@@ -80,12 +91,5 @@ if __name__ == "__main__":
     parser.add_argument('in_file', help='Input text file composed by dimensions')
 
     args = parser.parse_args()
-    total_paper = 0
-    box_dims_matrix = read_input_file(args.in_file)
-
-    for box_dims in box_dims_matrix:
-        gift_box = ElfBox(box_dims)
-        wrapping_surface = gift_box.compute_wrapping_surface()
-        total_paper += wrapping_surface
-
+    total_paper = compute_total_wrapping_paper(args.in_file)
     print total_paper
