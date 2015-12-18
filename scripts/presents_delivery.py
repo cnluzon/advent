@@ -81,6 +81,19 @@ def read_directions(in_file):
     fi.close()
     return result
 
+def robo_santa_delivery(directions):
+    santa_directions = directions[0::2]
+    robo_directions = directions[1::2]
+
+    santa_delivery = PresentDelivery(santa_directions)
+    santa_delivery.deliver()
+
+    robo_delivery = PresentDelivery(robo_directions)
+    robo_delivery.deliver()
+
+    visited_houses_merged = robo_delivery.visited_houses.union(santa_delivery.visited_houses)
+    return len(visited_houses_merged)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Reads the input from programming advent 03 and outputs the result')
@@ -92,4 +105,5 @@ if __name__ == "__main__":
     directions = read_directions(args.in_file)
     santa_delivery = PresentDelivery(directions)
     santa_delivery.deliver()
-    print len(santa_delivery.visited_houses)
+    print "Single-Santa solution: ", len(santa_delivery.visited_houses)
+    print "Robo-Santa enhanced solution: ", robo_santa_delivery(directions)
