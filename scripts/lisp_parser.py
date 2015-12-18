@@ -22,9 +22,20 @@ def compute_floor(lisp_string):
 
     return current_floor
 
+def find_first_basement_floor(lisp_string):
+    current_floor = 0
+    lisp_str_values = {'(':1, ')':-1}
+
+    for i in range(len(lisp_string)):
+        current_floor += lisp_str_values[lisp_string[i]]
+        if current_floor == -1:
+            return i+1
+
+    return -1
+
 def read_lisp_file(in_file):
     fi = open(in_file)
-    lisp_string = fi.readline()
+    lisp_string = fi.readline().rstrip()
     fi.close()
     return lisp_string
 
@@ -38,4 +49,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     lisp_string = read_lisp_file(args.in_file)
-    print compute_floor(lisp_string)
+    print "End floor:", compute_floor(lisp_string)
+    print "First basement: ", find_first_basement_floor(lisp_string)
