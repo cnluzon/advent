@@ -1,6 +1,6 @@
 # Advent of code
 This repository includes my answers for the
-[*Advent of Code*]((http://http://adventofcode.com) problems (as far as I get).
+[Advent of Code](http://http://adventofcode.com) problems (as far as I get).
 
 ## Correspondence with problems:
 
