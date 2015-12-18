@@ -8,3 +8,4 @@ This repository includes my answers for the
 02. Problem \#2: I was told there would be no math. File `elves_wrapping.py`
 03. Problem \#3: Perfectly Spherical Houses in a Vacuum. File `presents_delivery.py`
 04. Problem \#4: The Ideal Stocking Stuffer. File `advent_coins.py`
+05. Problem \#5: Doesn't He Have Intern-Elves For This?. File `naughty_or_nice.py`
