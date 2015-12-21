@@ -9,3 +9,4 @@ This repository includes my answers for the
 03. Problem \#3: Perfectly Spherical Houses in a Vacuum. File `presents_delivery.py`
 04. Problem \#4: The Ideal Stocking Stuffer. File `advent_coins.py`
 05. Problem \#5: Doesn't He Have Intern-Elves For This?. File `naughty_or_nice.py`
+06. Problem \#6: Probably a Fire Hazard. File `lights_decoration.py`

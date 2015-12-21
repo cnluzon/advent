@@ -114,6 +114,28 @@ class TestLightsGrid(unittest.TestCase):
         test_lights.turn_on(start, end)
         self.assertEquals(test_lights.count_lit(), 100)
 
+    def test_perform_invalid_instruction_raises_exception(self):
+        test_lights = ld.LightsGrid(dimensions=(10,10))
+        with self.assertRaises(ValueError):
+            test_lights.perform_instruction('add 100,100 through 200,200')
+
+    def test_perform_turn_on_instruction(self):
+        test_lights = ld.LightsGrid(dimensions=(10,10))
+        test_lights.perform_instruction('turn on 1,1 through 1,1')
+        self.assertEquals(test_lights.grid[1,1], 1)
+
+    def test_perform_turn_off_instruction(self):
+        test_lights = ld.LightsGrid(dimensions=(10,10))
+        test_lights.perform_instruction('turn off 1,1 through 1,1')
+        self.assertEquals(test_lights.grid[1,1], 0)
+
+    def test_perform_toggle_instruction(self):
+        test_lights = ld.LightsGrid(dimensions=(10,10))
+        test_lights.perform_instruction('toggle 1,1 through 1,1')
+        self.assertEquals(test_lights.grid[1,1], 1)
+        test_lights.perform_instruction('toggle 1,1 through 1,1')
+        self.assertEquals(test_lights.grid[1,1], 0)
+
 
 if __name__ == '__main__':
     suites = []
