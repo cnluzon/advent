@@ -45,11 +45,12 @@ import operator
 import numpy
 
 class LightsGrid:
-    def __init__(self, dimensions=(1000, 1000)):
+    def __init__(self, dimensions=(1000, 1000), regulable=False):
         self._validate_dimensions(dimensions)
         self.dimensions = dimensions
 
         self.grid = self._build_matrix(dimensions)
+        self.regulable = regulable
 
     def _validate_dimensions(self, dims):
         if dims[0] <= 0 or dims[1] <= 0:
@@ -71,6 +72,22 @@ class LightsGrid:
             for j in range(start[1], end[1]+1):
                 self.grid[i,j] = value
 
+    def increase(self, start, end, value=1):
+        for i in range(start[0], end[0]+1):
+            for j in range(start[1], end[1]+1):
+                self.grid[i,j] += value
+
+    def decrease(self, start, end, value=1):
+        for i in range(start[0], end[0]+1):
+            for j in range(start[1], end[1]+1):
+                self.grid[i,j] -= value
+
+                if self.grid[i,j] < 0:
+                    self.grid[i,j] = 0
+
+    def toggle_brightness(self, start, end):
+        self.increase(start, end, 2)
+
     def toggle(self, start, end):
         for i in range(start[0], end[0]+1):
             for j in range(start[1], end[1]+1):
@@ -85,12 +102,12 @@ class LightsGrid:
         return count
 
     def perform_instruction(self, light_instruction):
-        function, start, end = self._process_instruction(light_instruction)
+        function, start, end = self._process_instruction(light_instruction, processing_method=self._extract_function)
         function(start, end)
 
-    def _process_instruction(self, instruction):
+    def _process_instruction(self, instruction, processing_method):
         words = instruction.split(' ')
-        function = self._extract_function(instruction)
+        function = processing_method(instruction)
         start, end = self._extract_coords(instruction)
         return function, start, end
 
@@ -104,6 +121,29 @@ class LightsGrid:
         end = (int(end_string[0]), int(end_string[1]))
 
         return start, end
+
+    def perform_instruction_brightness_meaning(self, light_instruction):
+        function, start, end = self._process_instruction(light_instruction,
+                                                         processing_method=self._extract_function_brightness_meaning)
+        function(start, end)
+
+    def _extract_function_brightness_meaning(self, instruction):
+        words = instruction.split(' ')
+        function = None
+        if words[0] == 'turn':
+            if words[1] == 'on':
+                function = self.increase
+            elif words[1] == 'off':
+                function = self.decrease
+            else:
+                self._raise_unknown_function_error(instruction)
+
+        elif words[0] == 'toggle':
+            function = self.toggle_brightness
+        else:
+            self._raise_unknown_function_error(instruction)
+
+        return function
 
     def _extract_function(self, instruction):
         words = instruction.split(' ')
@@ -139,6 +179,9 @@ def perform_all_light_instructions(lights, instructions_list):
     for item in instructions_list:
         lights.perform_instruction(item)
 
+def perform_all_light_instructions_brightness(lights, instructions_list):
+    for item in instructions_list:
+        lights.perform_instruction_brightness_meaning(item)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -150,6 +193,6 @@ if __name__ == "__main__":
 
     santa_lights = LightsGrid((1000,1000))
     instructions = read_instructions(args.in_file)
-    perform_all_light_instructions(santa_lights, instructions)
+    perform_all_light_instructions_brightness(santa_lights, instructions)
 
     print santa_lights.count_lit()
